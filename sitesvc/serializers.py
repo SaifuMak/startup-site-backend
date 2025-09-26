@@ -27,6 +27,7 @@ class SiteSettingsSerializer(serializers.Serializer):
 class WebsiteResponseSerializer(serializers.Serializer):
     settings = SiteSettingsSerializer(source="*")
     content = serializers.SerializerMethodField()
+    clients = serializers.JSONField(read_only=True)
 
     def get_content(self, obj: Website):
         return {
@@ -49,4 +50,6 @@ class WebsiteResponseSerializer(serializers.Serializer):
             "cta": (obj.settings or {}).get("cta", {}),
             "footer": (obj.settings or {}).get("footer", {}),
             "contact": obj.contact or {},
+            "team" : obj.team or {},
+            "clients": obj.clients or {},
         }

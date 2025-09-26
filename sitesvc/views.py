@@ -12,11 +12,14 @@ def _normalize_host(host: str) -> str:
 @permission_classes([permissions.AllowAny])
 def site_by_host(request, host: str):
     host = _normalize_host(host)
+    # print(host, '-----------------------')
     site = (
         Website.objects
         .filter(Q(primary_domain=host) | Q(domains__contains=[{"domain": host, "verified": True}]))
         .first()
     )
+    # print(site, '-----------------------')
+
     if not site:
         if host.startswith("localhost") or host.startswith("127."):
             site = Website.objects.order_by("id").first()
@@ -24,6 +27,7 @@ def site_by_host(request, host: str):
             return Response({"error": "site not found"}, status=status.HTTP_404_NOT_FOUND)
 
     payload = WebsiteResponseSerializer(site).data
+    # print(payload)
     return Response(payload, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
