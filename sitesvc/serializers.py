@@ -8,6 +8,13 @@ class SiteSettingsSerializer(serializers.Serializer):
     faviconUrl = serializers.SerializerMethodField()
     themeTokens = serializers.SerializerMethodField(required=False)
 
+    logo = serializers.SerializerMethodField()
+    colorScheme = serializers.SerializerMethodField()
+    headerCodes = serializers.SerializerMethodField()
+    socialLinks = serializers.SerializerMethodField()
+    analyticsCode = serializers.SerializerMethodField()
+    copyrightText = serializers.SerializerMethodField()
+
     def get_seo(self, obj):
         s = obj.settings or {}
         return {
@@ -23,11 +30,37 @@ class SiteSettingsSerializer(serializers.Serializer):
     def get_themeTokens(self, obj):
         s = obj.settings or {}
         return s.get("theme_tokens")
+    
+    def get_logo(self, obj):
+        s = obj.settings or {}
+        return s.get("logo")
+
+    def get_colorScheme(self, obj):
+        s = obj.settings or {}
+        return s.get("color_scheme")
+
+    def get_headerCodes(self, obj):
+        s = obj.settings or {}
+        return s.get("header_codes")
+
+    def get_socialLinks(self, obj):
+        s = obj.settings or {}
+        return s.get("social_links", [])
+
+    def get_analyticsCode(self, obj):
+        s = obj.settings or {}
+        return s.get("analytics_code")
+
+    def get_copyrightText(self, obj):
+        s = obj.settings or {}
+        return s.get("copyright_text")
 
 class WebsiteResponseSerializer(serializers.Serializer):
     settings = SiteSettingsSerializer(source="*")
     content = serializers.SerializerMethodField()
     clients = serializers.JSONField(read_only=True)
+
+
 
     def get_content(self, obj: Website):
         return {
