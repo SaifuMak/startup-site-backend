@@ -52,4 +52,5 @@ class WebsiteResponseSerializer(serializers.Serializer):
             "contact": obj.contact or {},
             "team" : obj.team or {},
             "clients": obj.clients or {},
+             "faq": obj.faq or {}, 
         }
