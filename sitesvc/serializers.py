@@ -14,6 +14,9 @@ class SiteSettingsSerializer(serializers.Serializer):
     socialLinks = serializers.SerializerMethodField()
     analyticsCode = serializers.SerializerMethodField()
     copyrightText = serializers.SerializerMethodField()
+    theme = serializers.SerializerMethodField()
+
+
 
     def get_seo(self, obj):
         s = obj.settings or {}
@@ -54,12 +57,17 @@ class SiteSettingsSerializer(serializers.Serializer):
     def get_copyrightText(self, obj):
         s = obj.settings or {}
         return s.get("copyright_text")
+    
+    def get_theme(self, obj):
+        s = obj.settings or {}
+        return s.get("theme")
+
+
 
 class WebsiteResponseSerializer(serializers.Serializer):
     settings = SiteSettingsSerializer(source="*")
     content = serializers.SerializerMethodField()
     clients = serializers.JSONField(read_only=True)
-
 
 
     def get_content(self, obj: Website):
