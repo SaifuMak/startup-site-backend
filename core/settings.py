@@ -7,11 +7,13 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 # load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-
-
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else ["*"]
+
+# Allow all origins for development
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -23,6 +25,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "sitesvc",
+    "email_service"
 ]
 
 MIDDLEWARE = [
@@ -53,17 +56,34 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "core.wsgi.application"
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": os.getenv("DB_ENGINE"),
+#         "NAME": os.getenv("DB_NAME"),
+#         "USER": os.getenv("DB_USER"),
+#         "PASSWORD": os.getenv("DB_PASSWORD"),
+#         "HOST": os.getenv("DB_HOST"),
+#         "PORT": os.getenv("DB_PORT"),
+#     }
+# }
+
+
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DB_ENGINE"),
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",  # Assumes BASE_DIR is defined above
     }
 }
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'email-smtp.ap-northeast-1.amazonaws.com'
+# EMAIL_PORT = 587 
+EMAIL_PORT = 2587 
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = 'AKIAZ55JU5WM5PEXDJDW'
+EMAIL_HOST_PASSWORD = 'BGE0uzCQ0cPjMTr1JUeWgBwxwiFKRQzAvVpKvfARX5Kx' 
+DEFAULT_FROM_EMAIL = 'no-reply@mergemechano.com'
 
 AUTH_PASSWORD_VALIDATORS = []
 
