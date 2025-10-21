@@ -16,8 +16,6 @@ class SiteSettingsSerializer(serializers.Serializer):
     copyrightText = serializers.SerializerMethodField()
     theme = serializers.SerializerMethodField()
 
-
-
     def get_seo(self, obj):
         s = obj.settings or {}
         return {
@@ -61,6 +59,15 @@ class SiteSettingsSerializer(serializers.Serializer):
     def get_theme(self, obj):
         s = obj.settings or {}
         return s.get("theme")
+    
+    def get_footer_color(self, obj):
+        s = obj.settings or {}
+        return s.get("footer_color")
+    
+    def get_header_color(self, obj):
+        s = obj.settings or {}
+        return s.get("header_color")
+
 
 
 
