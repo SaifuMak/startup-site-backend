@@ -15,6 +15,10 @@ class SiteSettingsSerializer(serializers.Serializer):
     analyticsCode = serializers.SerializerMethodField()
     copyrightText = serializers.SerializerMethodField()
     theme = serializers.SerializerMethodField()
+    footer_color = serializers.SerializerMethodField()
+    header_color = serializers.SerializerMethodField()
+
+    
 
     def get_seo(self, obj):
         s = obj.settings or {}
