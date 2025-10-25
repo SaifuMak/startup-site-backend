@@ -80,16 +80,20 @@ class WebsiteResponseSerializer(serializers.Serializer):
     content = serializers.SerializerMethodField()
     clients = serializers.JSONField(read_only=True)
 
-
     def get_content(self, obj: Website):
+        banners = obj.banner or [] 
+        hero_banners = [
+        {
+            "title": banner.get("banner_title"),
+            "subtitle": banner.get("banner_desc"),
+            "image": banner.get("banner_img"),
+            "cta": banner.get("banner_btn"),
+        }
+        for banner in banners
+    ]
         return {
             "menu": (obj.settings or {}).get("menu", []),
-            "hero": {
-                "title": (obj.banner or {}).get("banner_title"),
-                "subtitle": (obj.banner or {}).get("banner_desc"),
-                "image": (obj.banner or {}).get("banner_img"),
-                "cta": (obj.banner or {}).get("banner_btn"),
-            },
+            "hero": hero_banners, 
             "about": {
                 "heading": (obj.about or {}).get("abt_title"),
                 "body": (obj.about or {}).get("abt_desc"),
@@ -104,5 +108,4 @@ class WebsiteResponseSerializer(serializers.Serializer):
             "contact": obj.contact or {},
             "team" : obj.team or {},
             "clients": obj.clients or {},
-             "faq": obj.faq or {}, 
         }
