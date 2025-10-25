@@ -18,8 +18,6 @@ class SiteSettingsSerializer(serializers.Serializer):
     footer_color = serializers.SerializerMethodField()
     header_color = serializers.SerializerMethodField()
 
-    
-
     def get_seo(self, obj):
         s = obj.settings or {}
         return {
@@ -79,6 +77,8 @@ class WebsiteResponseSerializer(serializers.Serializer):
     settings = SiteSettingsSerializer(source="*")
     content = serializers.SerializerMethodField()
     clients = serializers.JSONField(read_only=True)
+    faq = serializers.JSONField(read_only=True)
+
 
     def get_content(self, obj: Website):
         banners = obj.banner or [] 
@@ -108,4 +108,5 @@ class WebsiteResponseSerializer(serializers.Serializer):
             "contact": obj.contact or {},
             "team" : obj.team or {},
             "clients": obj.clients or {},
+            "faq": obj.faq or {}, 
         }
