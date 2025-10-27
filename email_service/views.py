@@ -126,3 +126,32 @@ class TramcoCareerEmailAPIView(APIView):
                 return Response('something went wrong',  status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class MergemechanoContact(APIView):
+
+    def post(self, request):
+
+        data = request.data
+        phone_no = data.get('phone')
+        message_content = data.get('message')
+        subject = f"New Contact Request from {data.get('name', 'Unknown')}"
+
+        message = (
+                f"Name: {data['name']}\n"
+                f"Email: {data['email']}\n"
+                f"Phone: {phone_no}\n"
+                f"Message: {message_content}\n"
+            )
+        try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email='no-reply@mergemechano.com',
+                    recipient_list=["info@mergemechano.com"], 
+                    fail_silently=False,
+                )
+                return Response({"success": True, "message": "Message received! Our team will contact you soon."}, status=status.HTTP_200_OK)
+        except Exception as e:
+                return Response({"success": False, "error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

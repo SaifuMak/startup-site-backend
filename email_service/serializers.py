@@ -13,3 +13,12 @@ class CareerFormSerializer(serializers.Serializer):
     preferred_location = serializers.CharField(required=False, allow_blank=True)
     other_location = serializers.CharField(required=False, allow_blank=True)
     resume = serializers.FileField(required=False, allow_null=True)  # Optional file
+
+
+class ContactSerializer(serializers.Serializer):
+    
+    name = serializers.CharField(max_length=100)
+    email = serializers.EmailField()
+    phone = serializers.CharField(max_length=20, allow_blank=True)
+    locationState = serializers.CharField(max_length=100, allow_blank=True)
+    message = serializers.CharField()
