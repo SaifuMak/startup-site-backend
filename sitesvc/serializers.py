@@ -101,6 +101,8 @@ class WebsiteResponseSerializer(serializers.Serializer):
                 "heading": (obj.about or {}).get("abt_title"),
                 "body": (obj.about or {}).get("abt_desc"),
                 "image": (obj.about or {}).get("abt_img"),
+                 "button": (obj.about or {}).get("about_btn", {}), 
+
             },
             "services": obj.services or {},
             "products": obj.products or {},
