@@ -17,6 +17,7 @@ class SiteSettingsSerializer(serializers.Serializer):
     theme = serializers.SerializerMethodField()
     footer_color = serializers.SerializerMethodField()
     header_color = serializers.SerializerMethodField()
+    header_text_color = serializers.SerializerMethodField()
 
     def get_seo(self, obj):
         s = obj.settings or {}
@@ -69,8 +70,10 @@ class SiteSettingsSerializer(serializers.Serializer):
     def get_header_color(self, obj):
         s = obj.settings or {}
         return s.get("header_color")
-
-
+    
+    def get_header_text_color(self, obj):
+        s = obj.settings or {}
+        return s.get("header_text_color")
 
 
 class WebsiteResponseSerializer(serializers.Serializer):
