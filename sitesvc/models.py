@@ -40,6 +40,29 @@ class Website(models.Model):
         return f"{self.primary_domain or 'no-domain'} ({self.template_key})"
 
 
+class CommingSoonSites(models.Model):
+    STATUS_CHOICES = [("active", "active"), ("paused", "paused"), ("deleted", "deleted")]
+
+    id = models.BigAutoField(primary_key=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cv_sites")
+    primary_domain = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    domains = models.JSONField(default=list, blank=True)
+
+    template_key = models.CharField(max_length=64, default="layout-1")
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="active")
+
+    settings = models.JSONField(default=dict, blank=True)
+    contact  = models.JSONField(default=dict, blank=True)
+
+    content_version = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.primary_domain or 'no-domain'} ({self.template_key})"
+
+
+
 class Payment(models.Model):
     STATUS_CHOICES = [
         ("succeeded", "succeeded"),

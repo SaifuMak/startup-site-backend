@@ -2,8 +2,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status, permissions
 from django.db.models import Q
-from .models import Website
-from .serializers import WebsiteResponseSerializer
+from .models import Website, CommingSoonSites
+from .serializers import WebsiteResponseSerializer, CommingSoonResponseSerializer
 
 def _normalize_host(host: str) -> str:
     return (host or "").strip().lower()
@@ -13,21 +13,40 @@ def _normalize_host(host: str) -> str:
 def site_by_host(request, host: str):
     host = _normalize_host(host)
     # print(host, '-----------------------')
-    site = (
-        Website.objects
-        .filter(Q(primary_domain=host) | Q(domains__contains=[{"domain": host, "verified": True}]))
-        .first()
-    )
-    # print(site, '-----------------------')
+
+    site_type = None
+    site = None
+    payload = {}
+
+    site = Website.objects.filter(
+        Q(primary_domain=host) |
+        Q(domains__contains=[{"domain": host, "verified": True}])
+    ).first()
+    if site:
+        site_type = "website"
+        payload = WebsiteResponseSerializer(site).data
 
     if not site:
-        if host.startswith("localhost") or host.startswith("127."):
-            site = Website.objects.order_by("id").first()
-        if not site:
-            return Response({"error": "site not found"}, status=status.HTTP_404_NOT_FOUND)
+        site = CommingSoonSites.objects.filter(
+            Q(primary_domain=host) |
+            Q(domains__contains=[{"domain": host, "verified": True}])
+        ).first()
+        if site:
+            site_type = "comming-soon-site"
+            payload = CommingSoonResponseSerializer(site).data
 
-    payload = WebsiteResponseSerializer(site).data
-    # print(payload)
+  
+    if not site and (host.startswith("localhost") or host.startswith("127.")):
+        site = Website.objects.order_by("id").first()
+        site_type = "website"
+        payload = WebsiteResponseSerializer(site).data if site else {}
+
+    if not site:
+        return Response({"error": "site not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Add site type in response
+    payload["site_type"] = site_type
+
     return Response(payload, status=status.HTTP_200_OK)
 
 @api_view(["POST"])

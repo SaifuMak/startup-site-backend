@@ -115,3 +115,24 @@ class WebsiteResponseSerializer(serializers.Serializer):
             "clients": obj.clients or {},
             "faq": obj.faq or {}, 
         }
+
+
+class CommingSoonResponseSerializer(serializers.Serializer):
+    settings = SiteSettingsSerializer(source="*")
+    content = serializers.SerializerMethodField()
+
+    def get_content(self, obj: Website):
+        
+        return {
+            "menu": (obj.settings or {}).get("menu", []),
+            "about": {
+                "heading": (obj.about or {}).get("abt_title"),
+                "body": (obj.about or {}).get("abt_desc"),
+                "image": (obj.about or {}).get("abt_img"),
+                 "button": (obj.about or {}).get("about_btn", {}), 
+
+            },
+            "cta": (obj.settings or {}).get("cta", {}),
+            "footer": (obj.settings or {}).get("footer", {}),
+            "contact": obj.contact or {},
+        }
