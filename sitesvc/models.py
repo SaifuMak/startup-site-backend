@@ -53,6 +53,7 @@ class CommingSoonSites(models.Model):
 
     settings = models.JSONField(default=dict, blank=True)
     contact  = models.JSONField(default=dict, blank=True)
+    details = models.JSONField(default=dict, blank=True)
 
     content_version = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)

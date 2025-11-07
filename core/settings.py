@@ -14,7 +14,6 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_
 # Allow all origins for development
 CORS_ALLOW_ALL_ORIGINS = True
 
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -53,7 +52,6 @@ TEMPLATES = [{
     ]},
 }]
 
-
 WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
@@ -66,7 +64,6 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT"),
     }
 }
-
 
 # DATABASES = {
 #     "default": {

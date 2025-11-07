@@ -32,9 +32,9 @@ def site_by_host(request, host: str):
             Q(domains__contains=[{"domain": host, "verified": True}])
         ).first()
         if site:
-            site_type = "comming-soon-site"
+            site_type = "comming_soon_site"
             payload = CommingSoonResponseSerializer(site).data
-
+  
   
     if not site and (host.startswith("localhost") or host.startswith("127.")):
         site = Website.objects.order_by("id").first()
