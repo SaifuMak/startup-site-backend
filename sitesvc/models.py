@@ -14,6 +14,7 @@ class Website(models.Model):
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="active")
 
     settings = models.JSONField(default=dict, blank=True)
+    color_settings = models.JSONField(default=dict, blank=True, null=True)
     banner   = models.JSONField(default=dict, blank=True)
     about    = models.JSONField(default=dict, blank=True)
     services = models.JSONField(default=dict, blank=True)
@@ -52,6 +53,7 @@ class CommingSoonSites(models.Model):
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="active")
 
     settings = models.JSONField(default=dict, blank=True)
+    color_settings = models.JSONField(default=dict, blank=True, null=True)
     contact  = models.JSONField(default=dict, blank=True)
     details = models.JSONField(default=dict, blank=True)
 
