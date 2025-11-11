@@ -11,6 +11,11 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",") if os.getenv("ALLOWED_HOSTS") else ["*"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-1c5a3a.up.railway.app",
+]
+
+
 # Allow all origins for development
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -65,6 +70,17 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT"),
     }
 }
+
+# import dj_database_url
+
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default=os.getenv("DATABASE_URL"),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
+
 
 # DATABASES = {
 #     "default": {
