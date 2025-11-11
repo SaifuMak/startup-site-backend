@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from authentication.models import User
 
 class Website(models.Model):
     STATUS_CHOICES = [("active", "active"), ("paused", "paused"), ("deleted", "deleted")]
 
     id = models.BigAutoField(primary_key=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="websites")
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="websites", null=True, blank=True)
     primary_domain = models.CharField(max_length=255, unique=True, null=True, blank=True)
     domains = models.JSONField(default=list, blank=True)
 
@@ -45,7 +45,7 @@ class CommingSoonSites(models.Model):
     STATUS_CHOICES = [("active", "active"), ("paused", "paused"), ("deleted", "deleted")]
 
     id = models.BigAutoField(primary_key=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cv_sites")
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="cv_sites", null=True, blank=True)
     primary_domain = models.CharField(max_length=255, unique=True, null=True, blank=True)
     domains = models.JSONField(default=list, blank=True)
 
@@ -76,7 +76,7 @@ class Payment(models.Model):
     PROVIDER_CHOICES = [("razorpay", "razorpay"), ("stripe", "stripe"), ("manual", "manual")]
 
     id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="payments", null=True, blank=True)
     website = models.ForeignKey(Website, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments")
     provider = models.CharField(max_length=32, choices=PROVIDER_CHOICES)
     provider_id = models.CharField(max_length=191, null=True, blank=True)

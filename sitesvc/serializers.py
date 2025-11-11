@@ -121,6 +121,7 @@ class CommingSoonResponseSerializer(serializers.Serializer):
     settings = SiteSettingsSerializer(source="*")
     content = serializers.SerializerMethodField()
     details = serializers.SerializerMethodField()
+    color_settings = serializers.SerializerMethodField()
 
 
     def get_content(self, obj: Website):
@@ -134,3 +135,6 @@ class CommingSoonResponseSerializer(serializers.Serializer):
     
     def get_details(self, obj):
         return obj.details or {}
+    
+    def get_color_settings(self, obj):
+        return obj.color_settings or {}
